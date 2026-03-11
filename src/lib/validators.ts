@@ -37,6 +37,12 @@ export const MachineSchema = z.object({
     .regex(/^[a-zA-Z0-9._-]+$/, "Use only letters, numbers, dot, dash, underscore")
     .optional()
     .or(z.literal("")),
+
+  serialNumber: z
+    .string()
+    .trim()
+    .min(2, "Serial Number is required")
+    .max(120),
   name: z.string().trim().min(2, "Name is required").max(120),
   driveLink: z.string().trim().url("Valid Google Drive link required"),
 

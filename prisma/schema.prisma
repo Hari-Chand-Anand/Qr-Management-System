@@ -25,6 +25,7 @@ model Machine {
   machineId        String   @unique
   name             String
   driveLink        String
+  serialNumber     String?
 
   /**
    * Service reports source for this machine.

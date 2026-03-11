@@ -14,7 +14,6 @@ import { redirect } from "next/navigation";
 
 function normalizeWhatsAppNumber(num?: string | null) {
   if (!num) return null;
-  // keep digits only (WhatsApp wants countrycode+number, no '+' or spaces)
   const digits = String(num).replace(/\D/g, "");
   return digits.length ? digits : null;
 }
@@ -22,15 +21,11 @@ function normalizeWhatsAppNumber(num?: string | null) {
 export async function createMachineAction(formData: FormData) {
   const raw = {
     machineId: String(formData.get("machineId") ?? "").trim(),
+    serialNumber: String(formData.get("serialNumber") ?? "").trim(),
     name: String(formData.get("name") ?? "").trim(),
     driveLink: String(formData.get("driveLink") ?? "").trim(),
-
-    // ✅ now can be: tab name OR CSV URL OR sheets tab URL
     sheetsLink: String(formData.get("sheetsLink") ?? "").trim(),
-
-    // ✅ optional company assignment (so API knows which sheet ID to use)
     companyId: String(formData.get("companyId") ?? "").trim(),
-
     whatsappNumber: String(formData.get("whatsappNumber") ?? "").trim(),
     whatsappTemplate: String(formData.get("whatsappTemplate") ?? "").trim(),
   };
@@ -51,10 +46,13 @@ export async function createMachineAction(formData: FormData) {
   const created = await prisma.machine.create({
     data: {
       machineId,
+      serialNumber: parsed.data.serialNumber.trim(),
       name: parsed.data.name,
       driveLink: parsed.data.driveLink,
       sheetsLink: parsed.data.sheetsLink,
-      companyId: parsed.data.companyId?.trim() ? parsed.data.companyId.trim() : null,
+      companyId: parsed.data.companyId?.trim()
+        ? parsed.data.companyId.trim()
+        : null,
       whatsappNumber: normalizeWhatsAppNumber(parsed.data.whatsappNumber),
       whatsappTemplate: parsed.data.whatsappTemplate?.trim() || null,
     },
@@ -71,6 +69,7 @@ export async function updateMachineAction(formData: FormData) {
   const raw = {
     id,
     machineId: String(formData.get("machineId") ?? "").trim(),
+    serialNumber: String(formData.get("serialNumber") ?? "").trim(),
     name: String(formData.get("name") ?? "").trim(),
     driveLink: String(formData.get("driveLink") ?? "").trim(),
     sheetsLink: String(formData.get("sheetsLink") ?? "").trim(),
@@ -91,10 +90,13 @@ export async function updateMachineAction(formData: FormData) {
     where: { id },
     data: {
       machineId: parsed.data.machineId?.trim() || undefined,
+      serialNumber: parsed.data.serialNumber.trim(),
       name: parsed.data.name,
       driveLink: parsed.data.driveLink,
       sheetsLink: parsed.data.sheetsLink,
-      companyId: parsed.data.companyId?.trim() ? parsed.data.companyId.trim() : null,
+      companyId: parsed.data.companyId?.trim()
+        ? parsed.data.companyId.trim()
+        : null,
       whatsappNumber: normalizeWhatsAppNumber(parsed.data.whatsappNumber),
       whatsappTemplate: parsed.data.whatsappTemplate?.trim() || null,
     },

@@ -21,6 +21,8 @@ export default async function ServiceReportsPage({
   const machine = await prisma.machine.findUnique({ where: { machineId } });
   if (!machine) return notFound();
 
+  const serialNumber = machine.serialNumber?.trim() || "Not available";
+
   return (
     <main className="min-h-dvh p-4 md:p-8">
       <div className="mx-auto max-w-lg space-y-4">
@@ -33,7 +35,10 @@ export default async function ServiceReportsPage({
               <div className="text-sm text-black/60">Service & Installation Reports</div>
               <div className="text-lg font-semibold leading-tight">{machine.name}</div>
               <div className="text-sm text-black/60">
-                S.No.: <span className="text-black font-medium">{machine.machineId}</span>
+                Machine ID: <span className="text-black font-medium">{machine.machineId}</span>
+              </div>
+              <div className="text-sm text-black/60">
+                S.No.: <span className="text-black font-medium">{serialNumber}</span>
               </div>
             </div>
           </div>

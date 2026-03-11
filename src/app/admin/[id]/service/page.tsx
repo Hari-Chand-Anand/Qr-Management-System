@@ -66,20 +66,22 @@ export default async function AdminMachineServicePage({
   const machine =
     (await prisma.machine.findUnique({ where: { id: routeId } })) ??
     (await prisma.machine.findUnique({ where: { machineId: routeId } }));
+
   if (!machine) return notFound();
 
   const baseUrl = await getBaseUrl();
   const rows = await fetchService(baseUrl, machine.machineId);
 
   const summary = computeSummary(rows);
+  const serialNumber = machine.serialNumber?.trim() || "Not available";
 
   const stats = [
-    { label: "Open", value: (summary as any).openCount ?? summary.openCount  ?? 0 },
+    { label: "Open", value: (summary as any).openCount ?? summary.openCount ?? 0 },
     { label: "Last Date", value: summary.lastInstallationDate ?? "-" },
     { label: "Closed", value: (summary as any).closeCount ?? summary.closeCount ?? 0 },
   ];
 
-  // ✅ Warranty cards (based on earliest Date in sheet)
+  // Warranty cards (based on earliest Date in sheet)
   const dates = rows
     .map((r) => parseDateSafe((r as any).Date))
     .filter((d): d is Date => !!d)
@@ -110,7 +112,12 @@ export default async function AdminMachineServicePage({
           <div>
             <div className="text-sm text-black/60">Machine</div>
             <div className="text-2xl font-semibold">{machine.name}</div>
-            <div className="text-sm text-black/60">{machine.machineId}</div>
+            <div className="text-sm text-black/60">
+              Machine ID: <span className="text-black font-medium">{machine.machineId}</span>
+            </div>
+            <div className="text-sm text-black/60">
+              S.No.: <span className="text-black font-medium">{serialNumber}</span>
+            </div>
           </div>
 
           <Link
@@ -124,7 +131,6 @@ export default async function AdminMachineServicePage({
 
       <StatCards stats={stats} />
 
-      {/* ✅ Warranty cards appear above the Search/Filters (inside SparesAdminClient) */}
       <StatCards stats={warrantyStats} />
 
       <SparesAdminClient rows={rows} />

@@ -3,7 +3,14 @@ import { prisma } from "@/lib/prisma";
 import { envPublic } from "@/lib/env";
 import Link from "next/link";
 import { Card } from "@/components/ui";
-import { Sheet, MessageCircle, Globe, Youtube, Instagram, ChevronRight } from "lucide-react";
+import {
+  Sheet,
+  MessageCircle,
+  Globe,
+  Youtube,
+  Instagram,
+  ChevronRight,
+} from "lucide-react";
 import { unstable_noStore as noStore } from "next/cache";
 
 export const runtime = "nodejs";
@@ -13,10 +20,12 @@ function buildWhatsAppLink(opts: {
   template: string;
   machineName: string;
   machineId: string;
+  serialNumber: string;
 }) {
   const msg = (opts.template || "")
     .replaceAll("[Machine Name]", opts.machineName)
-    .replaceAll("[Machine ID]", opts.machineId);
+    .replaceAll("[Machine ID]", opts.machineId)
+    .replaceAll("[Serial Number]", opts.serialNumber);
 
   const numberDigits = (opts.number || "").replace(/\D/g, "");
   const encoded = encodeURIComponent(msg);
@@ -64,25 +73,28 @@ export default async function MachineLandingPage({
     where: { machineId },
     include: { company: true },
   });
+
   if (!machine) return notFound();
 
   const waNumber = machine.whatsappNumber || envPublic.defaultWaNumber || "91";
   const waTemplate =
     machine.whatsappTemplate ||
     envPublic.defaultWaTemplate ||
-    "Hi, I need technical help for [Machine Name] (Machine ID: [Machine ID]).";
+    "Hi, I need technical help for [Machine Name]. Machine ID: [Machine ID]. Serial Number: [Serial Number].";
+
+  const serialNumber = machine.serialNumber?.trim() || "Not available";
 
   const waLink = buildWhatsAppLink({
     number: waNumber,
     template: waTemplate,
     machineName: machine.name,
     machineId: machine.machineId,
+    serialNumber,
   });
 
   const driveLink = machine.driveLink?.trim() || "";
   const sheetsLink = machine.sheetsLink?.trim() || "";
   const displayCompanyName = machine.company?.name?.trim() || envPublic.companyName;
-  const displaySerialNumber = machine.machineId;
 
   return (
     <main
@@ -118,11 +130,13 @@ export default async function MachineLandingPage({
                     <h1 className="text-2xl font-semibold leading-tight text-[#1d1d1f]">
                       {displayCompanyName}
                     </h1>
-                    <div className="mt-1 text-sm text-black/60">
-                      {machine.name}
+                    <div className="mt-1 text-sm text-black/60">{machine.name}</div>
+                    <div className="mt-1 text-sm text-black/70">
+                      Machine ID:{" "}
+                      <span className="font-medium text-black">{machine.machineId}</span>
                     </div>
                     <div className="mt-1 text-sm text-black/70">
-                      S.No.: <span className="font-medium text-black">{displaySerialNumber}</span>
+                      S.No.: <span className="font-medium text-black">{serialNumber}</span>
                     </div>
                   </div>
 
@@ -153,7 +167,11 @@ export default async function MachineLandingPage({
                   </h1>
                   <div className="mt-1 text-sm text-black/60">{machine.name}</div>
                   <div className="mt-1 text-sm text-black/70">
-                    S.No.: <span className="font-medium text-black">{displaySerialNumber}</span>
+                    Machine ID:{" "}
+                    <span className="font-medium text-black">{machine.machineId}</span>
+                  </div>
+                  <div className="mt-1 text-sm text-black/70">
+                    S.No.: <span className="font-medium text-black">{serialNumber}</span>
                   </div>
                 </div>
               </div>

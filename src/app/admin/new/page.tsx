@@ -62,6 +62,12 @@ export default async function AdminNewMachinePage() {
           </div>
 
           <div>
+            <label className="text-sm text-black/60">Serial Number (S.No.)</label>
+            <Input name="serialNumber" placeholder="e.g., 2309357/1363" required />
+            <p className="mt-1 text-xs text-black/40">Enter the actual machine serial number printed on the machine plate.</p>
+          </div>
+
+          <div>
             <label className="text-sm text-black/60">Machine Name</label>
             <Input name="name" placeholder="e.g., DUKE DY-4412P Pattern Sewing" required />
           </div>

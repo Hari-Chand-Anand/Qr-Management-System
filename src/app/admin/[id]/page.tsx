@@ -34,7 +34,7 @@ async function getBaseUrl() {
   return (looksLocal ? inferred || envBase : envBase) || "http://localhost:3000";
 }
 
-// ✅ Wrapper: <form action={...}> expects void | Promise<void>
+// Wrapper: <form action={...}> expects void | Promise<void>
 async function deleteMachineAction(formData: FormData): Promise<void> {
   "use server";
   await deleteMachineActionImpl(formData);
@@ -53,13 +53,20 @@ export default async function AdminMachineDetailPage({
 
   // Try DB primary id first, fallback to machineId
   const machine =
-    (await prisma.machine.findUnique({ where: { id: routeId }, include: { company: true } })) ??
-    (await prisma.machine.findUnique({ where: { machineId: routeId }, include: { company: true } }));
+    (await prisma.machine.findUnique({
+      where: { id: routeId },
+      include: { company: true },
+    })) ??
+    (await prisma.machine.findUnique({
+      where: { machineId: routeId },
+      include: { company: true },
+    }));
 
   if (!machine) return notFound();
 
   const baseUrl = (await getBaseUrl()).replace(/\/$/, "");
   const landingUrl = `${baseUrl}/m/${machine.machineId}`;
+  const serialNumber = machine.serialNumber?.trim() || "Not available";
 
   return (
     <div className="space-y-4">
@@ -67,12 +74,17 @@ export default async function AdminMachineDetailPage({
         <div>
           <div className="text-sm text-neutral-400">Machine</div>
           <div className="text-2xl font-semibold">{machine.name}</div>
-          <div className="text-sm text-neutral-400">{machine.machineId}</div>
+          <div className="text-sm text-neutral-400">
+            Machine ID: {machine.machineId}
+          </div>
           <div className="text-xs text-neutral-400 mt-1">
-            S.No.: {machine.machineId}
+            S.No.: {serialNumber}
           </div>
           <div className="mt-1 text-xs text-neutral-400">
-            Company: {machine.company ? `${machine.company.name} (${machine.company.code})` : "—"}
+            Company:{" "}
+            {machine.company
+              ? `${machine.company.name} (${machine.company.code})`
+              : "—"}
           </div>
         </div>
 
@@ -112,10 +124,20 @@ export default async function AdminMachineDetailPage({
       <QrDownloader url={landingUrl} label={`QR • ${machine.machineId}`} />
 
       <Card className="p-4">
-        <div className="text-sm text-neutral-400 mb-1">Drive link</div>
+        <div className="text-sm text-neutral-400 mb-1">Machine ID</div>
+        <div className="break-all">{machine.machineId || "-"}</div>
+
+        <div className="text-sm text-neutral-400 mt-4 mb-1">
+          Serial Number
+        </div>
+        <div className="break-all">{serialNumber}</div>
+
+        <div className="text-sm text-neutral-400 mt-4 mb-1">Drive link</div>
         <div className="break-all">{machine.driveLink || "-"}</div>
 
-        <div className="text-sm text-neutral-400 mt-4 mb-1">Service reports source</div>
+        <div className="text-sm text-neutral-400 mt-4 mb-1">
+          Service reports source
+        </div>
         <div className="break-all">{machine.sheetsLink || "-"}</div>
 
         <div className="text-sm text-neutral-400 mt-4 mb-1">WhatsApp</div>
