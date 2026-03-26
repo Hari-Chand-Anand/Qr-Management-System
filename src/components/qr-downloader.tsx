@@ -50,7 +50,7 @@ export default function QrDownloader({ url, label = "QR Code" }: Props) {
         <div>
           <div className="text-lg font-semibold">{label}</div>
           <p className="mt-1 text-sm text-black/60">
-            Printable high-resolution PNG (error correction: High).
+            Printable high-resolution PNG (correction: High).
           </p>
         </div>
         <div className="flex gap-2">
