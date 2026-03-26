@@ -212,9 +212,6 @@ export default async function MachineLandingPage({
                   </div>
                   <div>
                     <div className="text-lg font-semibold">Call Us for Technical Help</div>
-                    <div className="text-sm text-black/60">
-                      Opens WhatsApp with a pre-filled support message
-                    </div>
                   </div>
                 </div>
               </Card>
