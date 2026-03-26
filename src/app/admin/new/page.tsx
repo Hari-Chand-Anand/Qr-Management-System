@@ -103,9 +103,6 @@ export default async function AdminNewMachinePage() {
                 rows={3}
                 placeholder="Hi, I need technical help for [Machine Name] (Machine ID: [Machine ID])."
               />
-              <p className="mt-1 text-xs text-black/40">
-                Supports placeholders: [Machine Name], [Machine ID]
-              </p>
             </div>
           </div>
 
