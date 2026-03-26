@@ -190,9 +190,6 @@ export default async function MachineLandingPage({
                       <div className="text-lg font-semibold">
                         Service & Installation Reports
                       </div>
-                      <div className="text-sm text-black/60">
-                        Installation date, tickets, work done
-                      </div>
                     </div>
                   </div>
                 </Card>
