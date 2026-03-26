@@ -171,7 +171,7 @@ export default async function MachineLandingPage({
                     <span className="font-medium text-black">{machine.machineId}</span>
                   </div>
                   <div className="mt-1 text-sm text-black/70">
-                    S.No.: <span className="font-medium text-black">{serialNumber}</span>
+                    S.No: <span className="font-medium text-black">{serialNumber}</span>
                   </div>
                 </div>
               </div>
