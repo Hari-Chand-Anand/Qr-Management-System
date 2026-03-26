@@ -92,9 +92,6 @@ export default async function AdminNewMachinePage() {
             <div>
               <label className="text-sm text-black/60">WhatsApp Number (optional)</label>
               <Input name="whatsappNumber" placeholder="919999999999" />
-              <p className="mt-1 text-xs text-black/40">
-                Use digits only, include country code (India: 91...).
-              </p>
             </div>
             <div>
               <label className="text-sm text-black/60">WhatsApp Message Template (optional)</label>
