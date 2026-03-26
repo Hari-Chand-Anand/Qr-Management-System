@@ -86,10 +86,8 @@ export default async function AdminNewMachinePage() {
             />
             <p className="mt-1 text-xs text-black/40">
               Recommended: enter the <b>tab name</b> inside the company&apos;s sheet (e.g., <code>DY-4411PSF__SERVICE</code>).<br />
-              Also supported: a published CSV link (gviz/export) or a Google Sheets tab URL.
             </p>
           </div>
-
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="text-sm text-black/60">WhatsApp Number (optional)</label>
