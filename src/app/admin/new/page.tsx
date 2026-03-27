@@ -109,7 +109,6 @@ export default async function AdminNewMachinePage() {
               Clear
             </Button>
           </div>
-
           <p className="text-xs text-black/40">
             After saving, open the machine entry to download the QR code.
           </p>
